@@ -1,114 +1,159 @@
 <template>
-  <div class="content-rating">
-    <div
-      role="slider"
-      :aria-valuemin="0"
-      :aria-valuemax="props.ratingCount"
-      :aria-valuenow="selectedRating"
-      :style="cssVars"
-      class="average-rating"
-      @mousemove="handleMouseMove"
-      @mouseleave="handleMouseLeave"
-      @click="handleClick"></div>
+  <div
+    class="nuxt-rating-wrapper"
+    :class="{ 'nuxt-rating-inline': props.inline }"
+    @mouseleave="resetRating">
+    <span
+      v-for="n in props.ratingCount"
+      :key="n"
+      :class="[{ 'nuxt-rating-pointer': !props.readOnly }, 'nuxt-rating-star']"
+      :style="{ marginRight: n !== props.ratingCount ? `${props.ratingSpacing}px` : '0' }">
+      <NuxtStar
+        :fill="fillLevel[n - 1]"
+        :size="props.ratingSize"
+        :points="props.ratingContent"
+        :star-id="n"
+        :step="step"
+        :active-color="currentActiveColor"
+        :inactive-color="props.inactiveColor"
+        :border-color="props.borderColor"
+        :border-width="props.borderWidth"
+        :rounded-corners="props.roundedCorners"
+        @star-selected="setRating($event, true)"
+        @star-mouse-move="setRating" />
+    </span>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { computed, ref, watch } from 'vue'
-  import type { Props } from '../types'
+  import { computed, ref, watch, onMounted } from 'vue'
+  import NuxtStar from './NuxtStar.vue'
+  import type { NuxtRatingProps } from '../types'
 
-  const emit = defineEmits<{
-    ratingSelected: [rate: number]
-    ratingHovered: [event: number]
-  }>()
+  interface RatingEvent {
+    id: number
+    position: number
+  }
 
-  const props = withDefaults(defineProps<Props>(), {
+  const props = withDefaults(defineProps<NuxtRatingProps>(), {
+    ratingStep: 1,
+    ratingValue: 0,
+    roundStartRating: true,
+    activeColor: '#ffa41c',
+    inactiveColor: '#d8d8d8',
     ratingCount: 5,
-    ratingSize: '32px',
-    activeColor: '#ffc700',
-    inactiveColor: '#ddd',
-    ratingValue: 3.7,
-    ratingContent: '★',
-    readOnly: true,
+    ratingContent: () => [19.8, 2.2, 6.6, 43.56, 39.6, 17.16, 0, 17.16, 33, 43.56],
+    ratingSize: 50,
+    ratingSpacing: 2,
+    readOnly: false,
+    inline: false,
+    borderColor: '#db8403',
+    borderWidth: 0,
+    roundedCorners: false,
+    clearable: false,
   })
 
+  const emit = defineEmits(['ratingSelected', 'ratingHovered'])
+
+  const step = ref(props.ratingStep * 100)
+  const fillLevel = ref<number[]>(Array(props.ratingCount).fill(0))
+  const currentRating = ref(props.ratingValue)
   const selectedRating = ref(props.ratingValue)
-  const hoveredRating = ref(0)
+  const ratingSelected = ref(false)
 
-  const percent = computed(() => (selectedRating.value / props.ratingCount) * 100 + '%')
+  const shouldRound = computed(() => ratingSelected.value || props.roundStartRating)
 
-  const ratingsContent = computed(() => {
-    return Array(props.ratingCount).fill(props.ratingContent).join('')
+  const activeColors = computed(() =>
+    Array.isArray(props.activeColor)
+      ? padColors(props.activeColor, props.ratingCount, props.activeColor.slice(-1)[0])
+      : new Array(props.ratingCount).fill(props.activeColor),
+  )
+
+  const currentActiveColor = computed(() =>
+    selectedRating.value > 0
+      ? activeColors.value[Math.ceil(selectedRating.value) - 1]
+      : props.inactiveColor,
+  )
+
+  const roundedRating = computed(() => {
+    const inv = 1.0 / props.ratingStep
+    return Math.min(props.ratingCount, Math.ceil(currentRating.value * inv) / inv)
   })
 
   watch(
     () => props.ratingValue,
-    newRating => {
-      selectedRating.value = newRating
+    val => {
+      currentRating.value = val
+      selectedRating.value = val
+      createStars(shouldRound.value)
     },
   )
 
-  const cssVars = computed(() => ({
-    '--active-color': props.activeColor,
-    '--cursor-type': props.readOnly ? 'default' : 'pointer',
-    '--inactive-color': props.inactiveColor,
-    '--rating-value': hoveredRating.value ? hoveredRating.value : selectedRating.value,
-    '--rating-count': props.ratingCount,
-    '--rating-content': `"${ratingsContent.value}"`,
-    '--rating-size': props.ratingSize,
-    '--percent': percent.value,
-  }))
+  onMounted(() => {
+    createStars(props.roundStartRating)
+  })
 
-  const handleMouseMove = (event: MouseEvent) => {
-    if (props.readOnly) return
-    emit('ratingHovered', calculateRating(event))
-    hoveredRating.value = calculateRating(event)
+  const setRating = (event: RatingEvent, persist: boolean) => {
+    if (!props.readOnly) {
+      const position = Number(event.position) / 100
+      const newRating =
+        event.id - 1 + Math.ceil(position * (1 / props.ratingStep)) * props.ratingStep
+      currentRating.value = Math.min(newRating, props.ratingCount)
+
+      const decimalPlaces = props.ratingStep.toString().split('.')[1]?.length || 0
+      const formattedRating = Number(currentRating.value.toFixed(decimalPlaces))
+
+      if (persist) {
+        selectedRating.value =
+          props.clearable && currentRating.value === selectedRating.value ? 0 : currentRating.value
+        ratingSelected.value = true
+        emit('ratingSelected', formattedRating)
+      }
+      createStars(true)
+      emit('ratingHovered', formattedRating)
+    }
   }
 
-  const handleMouseLeave = () => {
-    if (props.readOnly) return
-    hoveredRating.value = selectedRating.value
+  const resetRating = () => {
+    if (!props.readOnly) {
+      currentRating.value = selectedRating.value
+      createStars(shouldRound.value)
+      const decimalPlaces = props.ratingStep.toString().split('.')[1]?.length || 0
+      const formattedRating = Number(currentRating.value.toFixed(decimalPlaces))
+      emit('ratingHovered', formattedRating)
+    }
   }
 
-  const handleClick = (event: MouseEvent) => {
-    if (props.readOnly) return
-    emit('ratingSelected', calculateRating(event))
-    selectedRating.value = calculateRating(event)
+  const createStars = (round = true) => {
+    const rating = round ? roundedRating.value : currentRating.value
+    fillLevel.value = Array.from({ length: props.ratingCount }, (_, i) => {
+      if (i < rating) {
+        return rating - i > 1 ? 100 : (rating - i) * 100
+      }
+      return 0
+    })
   }
 
-  function calculateRating(event: MouseEvent): number {
-    const ratingEl = event.currentTarget as HTMLElement
-    if (!ratingEl) return 0
-    const width = ratingEl.clientWidth
-    return Math.ceil((event.offsetX / width) * props.ratingCount)
-  }
+  const padColors = (array: string[], minLength: number, fillValue: string) =>
+    array.concat(Array(minLength - array.length).fill(fillValue))
 </script>
 
-<style>
-  .content-rating {
-    display: flex;
+<style scoped>
+  .nuxt-rating-star {
+    display: inline-block;
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .average-rating {
-    height: var(--rating-size);
-    font-size: var(--rating-size);
-    cursor: var(--cursor-type);
-    white-space: nowrap;
+  .nuxt-rating-pointer {
+    cursor: pointer;
+  }
+
+  .nuxt-rating {
     display: flex;
     align-items: center;
   }
 
-  .average-rating::before {
-    --percent: calc(var(--rating-value) / var(--rating-count) * 100%);
-    content: var(--rating-content) !important;
-    position: relative;
-    background: linear-gradient(
-      90deg,
-      var(--active-color) var(--percent),
-      var(--inactive-color) var(--percent)
-    );
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  .nuxt-rating-inline {
+    display: inline-flex;
   }
 </style>
