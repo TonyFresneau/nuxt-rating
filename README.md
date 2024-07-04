@@ -67,7 +67,8 @@ The following props can be passed to customize the appearance and behavior of th
 
 - `ratingCount` (optional, default: 5): The total number of rating levels available.
 - `ratingSize` (optional, default: "32px"): The size of the rating meter.
-- `letterSpacing` (optional, default: "0px"): The spacing between the rating levels.
+- `ratingSpacing` (optional, default: 0): The spacing between the rating levels.
+- `ratingStep` (optional, default: 0): Defines the increment between rating levels. For example, with ratingStep set to 0.5, users can select ratings like 0.5, 1, 1.5, etc.
 - `activeColor` (optional, default: "#ffc700"): The color of the active rating level.
 - `inactiveColor` (optional, default: "gray"): The color of the inactive rating levels.
 - `ratingValue` (optional, default: 3.7): The initial rating value.
