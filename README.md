@@ -28,7 +28,6 @@ Find and replace all on all files (CMD+SHIFT+F):
 - &nbsp; SSR Friendly.
 - &nbsp; Typescript Friendly.
 - &nbsp; Display decimal ratings.
-- &nbsp; Display decimal ratings.
 - &nbsp; Inspired by Vue Star Rating.
 
 ## Quick Setup
@@ -57,7 +56,7 @@ export default defineNuxtConfig({
 3. Use `nuxt-rating` component
 
 ```js
-<NuxtRating :read-only="false" :ratingValue="3.5" />
+<NuxtRating :read-only="false" :rating-value="3.5" />
 ```
 
 <img src="https://i.postimg.cc/zBwLZ85C/Sans-titre.jpg" width="128">
@@ -77,6 +76,7 @@ The following props can be passed to customize the appearance and behavior of th
 - `borderColor` (optional, default: "#db8403"): The border color of the stars.
 - `borderWidth` (optional, default: 0): The border width of the stars.
 - `roundedCorners` (optional, default: false): Specifies whether the stars should have rounded corners.
+- `inline` (optional, default: false): Adds `display: inline-flex` to the wrapper.
 - `clearable` (optional, default: false): Specifies whether the rating can be cleared.
 
 ## Events Explanation
@@ -106,7 +106,6 @@ The component emits the following events:
       :rating-step="0.5"
       :rounded-corners="true"
       :border-width="5"
-      :fixed-points="2"
       :rating-size="30"
       :rating-value="4.5"
       @rating-selected="logRating"
@@ -126,7 +125,6 @@ The component emits the following events:
         :rating-step="0.1"
         :rounded-corners="true"
         :border-width="5"
-        :fixed-points="2"
         :rating-size="10"
         :rating-value="3.7"
         @rating-selected="logRating"
@@ -152,7 +150,6 @@ The component emits the following events:
         21.9171, 21.8173, 25.25, 16.044,
       ]"
       :border-width="0"
-      :fixed-points="2"
       :rating-size="30"
       :rating-value="4.5"
       @rating-selected="logRating" />
