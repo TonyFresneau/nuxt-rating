@@ -53,11 +53,19 @@
   const isReady = ref(false)
   const isStarActive = ref(true)
 
+  const parseSize = (size: string | number): number => {
+    if (typeof size === 'number') return size
+    const value = parseFloat(size)
+    return isNaN(value) ? 0 : value
+  }
+
+  const size = parseSize(props.size)
+
   const starPointsToString = computed(() => props.points.join(','))
   const gradId = computed(() => `url(#${grad.value})`)
-  const starSize = computed(
-    () => props.size + (props.roundedCorners && props.borderWidth <= 0 ? 6 : props.borderWidth),
-  )
+  const starSize = computed(() => {    
+    return size + (props.roundedCorners && props.borderWidth <= 0 ? 6 : props.borderWidth)
+  })
   const starFill = computed(() => `${props.fill}%`)
   const getBorderColor = computed(() =>
     props.fill <= 0
@@ -95,7 +103,7 @@
   }
 
   const getPosition = (event: MouseEvent) => {
-    const starWidth = (92 / 100) * props.size
+    const starWidth = (92 / 100) * size
     const offset = Math.max(event.offsetX, 1)
     return Math.min(Math.round((100 / starWidth) * offset), 100)
   }

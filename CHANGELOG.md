@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2
+
+### Patch Changes
+
+- Update doc, default values and convert string rating size in number to improve retro-compatibility
+
 ## 0.1.1
 
 ### Patch Changes

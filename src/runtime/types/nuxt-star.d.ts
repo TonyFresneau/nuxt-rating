@@ -1,7 +1,7 @@
 export type NuxtStarProps = {
   fill: number
   points: number[]
-  size: number
+  size: number | string
   starId: number
   activeColor: string
   inactiveColor: string

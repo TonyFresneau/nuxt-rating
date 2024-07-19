@@ -4,6 +4,8 @@
     <NuxtRating
       :rating-count="5"
       :active-color="'red'"
+      :rating-step="1"
+      :read-only="false"
       :rating-value="rating"
       @rating-selected="event => (rating = event)" />
     <span class="rating-value">{{ rating }}</span>

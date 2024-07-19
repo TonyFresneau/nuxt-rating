@@ -6,7 +6,7 @@ export type NuxtRatingProps = {
   inactiveColor?: string
   ratingCount?: number
   ratingContent?: number[]
-  ratingSize?: number
+  ratingSize?: number | string
   ratingSpacing?: number
   readOnly?: boolean
   inline?: boolean

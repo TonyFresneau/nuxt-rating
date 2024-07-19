@@ -66,12 +66,12 @@ export default defineNuxtConfig({
 The following props can be passed to customize the appearance and behavior of the component:
 
 - `ratingCount` (optional, default: 5): The total number of rating levels available.
-- `ratingSize` (optional, default: "32px"): The size of the rating meter.
-- `ratingSpacing` (optional, default: 0): The spacing between the rating levels.
-- `ratingStep` (optional, default: 0): Defines the increment between rating levels. For example, with ratingStep set to 0.5, users can select ratings like 0.5, 1, 1.5, etc.
+- `ratingSize` (optional, default: 15): The size of the rating meter.
+- `ratingSpacing` (optional, default: 2): The spacing between the rating levels.
+- `ratingStep` (optional, default: 0.1): Defines the increment between rating levels. For example, with ratingStep set to 0.5, users can select ratings like 0.5, 1, 1.5, etc.
 - `activeColor` (optional, default: "#ffc700"): The color of the active rating level.
 - `inactiveColor` (optional, default: "gray"): The color of the inactive rating levels.
-- `ratingValue` (optional, default: 3.7): The initial rating value.
+- `ratingValue` (optional, default: 4.5): The initial rating value.
 - `ratingContent` (optional, default: "[19.8, 2.2, 6.6, 43.56, 39.6, 17.16, 0, 17.16, 33, 43.56]"): The content to be displayed for each rating level, should be polygon points see https://developer.mozilla.org/fr/docs/Web/SVG/Element/polygon.
 - `readOnly` (optional, default: true): Specifies whether the rating meter is read-only or interactive.
 - `borderColor` (optional, default: "#db8403"): The border color of the stars.

@@ -8,14 +8,14 @@
 
     <NuxtRating
       border-color="#db8403"
-      :read-only="true"
+      :read-only="false"
       active-color="#ffa41c"
       inactive-color="#fff"
       :rating-step="0.5"
       :rounded-corners="true"
       :border-width="5"
       :fixed-points="2"
-      :rating-size="30"
+      :rating-size="'30px'"
       :rating-value="4.5"
       @rating-selected="logRating"
       @rating-hovered="event => (rating = event)" />

@@ -36,16 +36,16 @@
   }
 
   const props = withDefaults(defineProps<NuxtRatingProps>(), {
-    ratingStep: 1,
-    ratingValue: 0,
+    ratingStep: 0.1,
+    ratingValue: 4.5,
     roundStartRating: true,
     activeColor: '#ffa41c',
     inactiveColor: '#d8d8d8',
     ratingCount: 5,
     ratingContent: () => [19.8, 2.2, 6.6, 43.56, 39.6, 17.16, 0, 17.16, 33, 43.56],
-    ratingSize: 50,
+    ratingSize: 15,
     ratingSpacing: 2,
-    readOnly: false,
+    readOnly: true,
     inline: false,
     borderColor: '#db8403',
     borderWidth: 0,

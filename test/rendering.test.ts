@@ -12,7 +12,7 @@ describe('test module', async () => {
 
     const html = await $fetch('/')
     expect(html).toContain('class="nuxt-rating-wrapper"')
-    console.log('html', html.res)
+    console.log('html', html)
   })
 
   describe('test module with playwright', async () => {
@@ -36,9 +36,13 @@ describe('test module', async () => {
 
       const ratingValue = await page.$('.rating-value')
       expect(ratingValue).not.toBeNull()
-      const textContent = await ratingValue.innerText()
-      expect(textContent).toContain('3')
 
+      if (ratingValue) {
+        const textContent = await ratingValue.innerText()
+        expect(textContent).toContain('3')
+      } else {
+        throw new Error('ratingValue element is null')
+      }
     })
 
     afterAll(async () => {
