@@ -39,7 +39,8 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@nuxt/kit": "^3.12.2"
+    "@nuxt/kit": "^3.12.2",
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.5",
