@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.4
+
+### Patch Changes
+
+- b36048b: Add typescript to dependencies
+
 ## 0.1.3
 
 ### Patch Changes
