@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isReady">
+  <div>
     <svg
       class="nuxt-rating-star-svg"
       :height="starSize"
@@ -49,8 +49,11 @@
 
   const emit = defineEmits(['star-mouse-move', 'star-selected'])
 
-  const grad = ref('')
-  const isReady = ref(false)
+  const getRandomId = () => Math.random().toString(36).substring(7)
+  const getColor = (color: string) => new AlphaColor(color).parseAlphaColor().color
+  const getOpacity = (color: string) => new AlphaColor(color).parseAlphaColor().opacity
+
+  const grad = ref('#skeletonGrad')
   const isStarActive = ref(true)
 
   const parseSize = (size: string | number): number => {
@@ -63,16 +66,12 @@
 
   const starPointsToString = computed(() => props.points.join(','))
   const gradId = computed(() => `url(#${grad.value})`)
-  const starSize = computed(() => {    
+  const starSize = computed(() => {
     return size + (props.roundedCorners && props.borderWidth <= 0 ? 6 : props.borderWidth)
   })
   const starFill = computed(() => `${props.fill}%`)
   const getBorderColor = computed(() =>
-    props.fill <= 0
-      ? props.roundedCorners && props.borderWidth <= 0
-        ? props.inactiveColor
-        : props.borderColor
-      : props.activeColor,
+    props.roundedCorners && props.borderWidth <= 0 ? props.inactiveColor : props.borderColor,
   )
   const maxSize = computed(() => {
     const max = Math.max(...props.points)
@@ -80,11 +79,6 @@
   })
   const viewBox = computed(() => `0 0 ${maxSize.value} ${maxSize.value}`)
   const strokeLinejoin = computed(() => (props.roundedCorners ? 'round' : 'miter'))
-
-  onMounted(() => {
-    grad.value = getRandomId()
-    isReady.value = true
-  })
 
   const mouseMoving = (event: MouseEvent) => {
     emit('star-mouse-move', {
@@ -115,9 +109,9 @@
     })
   }
 
-  const getRandomId = () => Math.random().toString(36).substring(7)
-  const getColor = (color: string) => new AlphaColor(color).parseAlphaColor().color
-  const getOpacity = (color: string) => new AlphaColor(color).parseAlphaColor().opacity
+  onMounted(() => {
+    grad.value = getRandomId()
+  })
 </script>
 
 <style scoped>

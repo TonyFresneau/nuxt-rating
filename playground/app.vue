@@ -20,7 +20,7 @@
       @rating-selected="logRating"
       @rating-hovered="event => (rating = event)" />
 
-    <br />
+    <!-- <br />
     <br />
     <br />
 
@@ -63,7 +63,7 @@
       :fixed-points="2"
       :rating-size="30"
       :rating-value="4.5"
-      @rating-selected="logRating" />
+      @rating-selected="logRating" /> -->
   </div>
 </template>
 

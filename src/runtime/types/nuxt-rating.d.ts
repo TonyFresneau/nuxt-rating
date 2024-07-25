@@ -4,6 +4,7 @@ export type NuxtRatingProps = {
   roundStartRating?: boolean
   activeColor?: string | string[]
   inactiveColor?: string
+  skeletonColor?: string
   ratingCount?: number
   ratingContent?: number[]
   ratingSize?: number | string
