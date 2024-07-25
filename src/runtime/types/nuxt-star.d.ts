@@ -6,6 +6,7 @@ export type NuxtStarProps = {
   activeColor: string
   inactiveColor: string
   borderColor: string
+  skeletonColor?: string
   borderWidth: number
   roundedCorners: boolean
 }

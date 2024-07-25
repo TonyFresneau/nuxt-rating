@@ -50,10 +50,11 @@
   const emit = defineEmits(['star-mouse-move', 'star-selected'])
 
   const getRandomId = () => Math.random().toString(36).substring(7)
-  const getColor = (color: string) => new AlphaColor(color).parseAlphaColor().color
+  const getColor =  (color: string) => new AlphaColor(color).parseAlphaColor().color
   const getOpacity = (color: string) => new AlphaColor(color).parseAlphaColor().opacity
 
-  const grad = ref('#skeletonGrad')
+
+  const grad = ref(props.activeColor)
   const isStarActive = ref(true)
 
   const parseSize = (size: string | number): number => {

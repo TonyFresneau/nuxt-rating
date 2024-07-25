@@ -9,13 +9,13 @@
       :class="[{ 'nuxt-rating-pointer': !props.readOnly, 'skeleton-pulse': isLoading }, 'nuxt-rating-star']"
       :style="{ marginRight: n !== props.ratingCount ? `${props.ratingSpacing}px` : '0' }">
       <NuxtStar
-        :fill="fillLevel[n - 1]"
+        :fill="isLoading ? 100 : fillLevel[n - 1]"
         :size="props.ratingSize"
         :points="props.ratingContent"
         :star-id="n"
         :step="step"
         :active-color="isLoading ? props.skeletonColor : currentActiveColor"
-        :inactive-color="isLoading ? props.skeletonColor : props.inactiveColor"
+        :inactive-color="props.inactiveColor"
         :border-color="isLoading ? props.skeletonColor : props.borderColor"
         :border-width="props.borderWidth"
         :rounded-corners="props.roundedCorners"

@@ -10,6 +10,7 @@
       border-color="#db8403"
       :read-only="false"
       active-color="#ffa41c"
+      skeleton-color="#e600ff"
       inactive-color="#fff"
       :rating-step="0.5"
       :rounded-corners="true"
@@ -20,7 +21,7 @@
       @rating-selected="logRating"
       @rating-hovered="event => (rating = event)" />
 
-    <!-- <br />
+    <br />
     <br />
     <br />
 
@@ -30,6 +31,7 @@
         class="px-3"
         border-color="#db8403"
         active-color="#ffa41c"
+        skeleton-color="#1f2deb"
         inactive-color="#fff"
         :rating-step="0.1"
         :rounded-corners="true"
@@ -63,7 +65,7 @@
       :fixed-points="2"
       :rating-size="30"
       :rating-value="4.5"
-      @rating-selected="logRating" /> -->
+      @rating-selected="logRating" />
   </div>
 </template>
 
